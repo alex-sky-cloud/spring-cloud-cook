@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/spring-cloud-microservices-demo-modules/gradlew
+/spring-cloud-microservices-demo-modules/gradlew.bat
