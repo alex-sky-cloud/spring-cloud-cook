@@ -1,2 +1,5 @@
 rootProject.name = 'spring-cloud-microservices-demo-modules'
-
+/*include 'eureka-server'*/
+/*составная сборка, позволит при запуске корневого
+* *.gradle, запустить сборку всех внутренних модулей.*/
+includeBuild 'eureka-server'
