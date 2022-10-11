@@ -1,0 +1,30 @@
+SERVER_PORT_SERVICE_DISCOVERY: 8081
+IP_ADDRESS_SERVICE_DISCOVERY: http://localhost
+SERVER_PORT_GATEWAY: 8082
+
+eureka:
+  client:
+    service-url:
+      # url, откуда можно запросить информацию о зарегистрированных микросервисах
+      defaultZone: ${IP_ADDRESS_SERVICE_DISCOVERY}:${SERVER_PORT_SERVICE_DISCOVERY}/eureka
+logging:
+  pattern:
+    console: '%C{1.} [%-5level] %d{HH:mm:ss} - %msg%n'
+server:
+  port: ${SERVER_PORT_GATEWAY}
+spring:
+  application:
+    name: api-gateway # имя текущего сервиса
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # Настроить шлюз для создания маршрутов на основе services,
+          # зарегистрированных в DiscoveryClient, в реестре совместимых служб.
+          # Включить данную возможность
+          enabled: true
+          # имена сервисов будут принудительно переведены в нижний регистр
+          # (это необходимое условие, чтобы Gateway, мог зарегистрировать их у себя)
+          # если информация в информации о зарегистрированном сервисе,
+          # id сервиса будет заглавными буквами
+          lower-case-service-id: true

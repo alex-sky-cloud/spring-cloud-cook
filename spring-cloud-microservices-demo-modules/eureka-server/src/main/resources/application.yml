@@ -5,6 +5,8 @@ eureka:
   client:
     # Т.к. это не клиент, а здесь настраивается Eureka-server
     # то убираем лишние настройки (регистрация веб-сервисов и пр.)
+    # Сервер Eureka также может выступать в качестве клиента. Поэтому установка
+    # registerWith Eureka и fetchRegistry в false является обязательной
     fetch-registry: false
     register-with-eureka: false
     service-url:
