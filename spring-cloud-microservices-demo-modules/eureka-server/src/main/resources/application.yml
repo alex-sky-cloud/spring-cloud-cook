@@ -1,4 +1,4 @@
-SERVER_PORT: 8081
+SERVER_PORT: 8761
 IP_ADDRESS: http://localhost
 
 eureka:

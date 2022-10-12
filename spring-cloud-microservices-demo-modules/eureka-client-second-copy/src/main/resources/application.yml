@@ -4,9 +4,8 @@ SERVER_PORT_CLIENT: 0
 
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${random.uuid}
-  # https://docs.spring.io/spring-cloud-netflix/docs/current/reference/html/#changing-the-eureka-instance-id
-    #instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+    # https://docs.spring.io/spring-cloud-netflix/docs/current/reference/html/#changing-the-eureka-instance-id
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
   client:
     # Значение по умолчанию для обоих этих свойств равно true,
     # что указывает на то, что Eureka client должен извлекать реестр из других экземпляров Eureka,
@@ -38,5 +37,5 @@ server:
   port: ${SERVER_PORT_CLIENT}
 spring:
   application:
-    name: eureka-client # Id-приложения. Его желательно указывать всегда в микро-сервисных приложениях
+    name: eureka-client-second-copy # Id-приложения. Его желательно указывать всегда в микро-сервисных приложениях
 

@@ -1,4 +1,4 @@
-package org.microserives.demo.eurekaclient.web;
+package org.microserives.demo.eurekaclientsecondcopy.web;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,17 +20,15 @@ public class ApiRestController {
     @Value("${eureka.client.service-url.defaultZone}")
     private String uriServiceDiscovery;
 
-   // @Value("${eureka.instance.instanceId}")
+    @Value("${eureka.instance.instanceId}")
     private String idService;
 
-    @Value("${eureka.instance.instance-id}")
-    private String instanceId;
 
-    @GetMapping("id")
+    @GetMapping("id-second-service")
     public String getIdService(){
 
-        return " ---- Instance Id service : " +
-                instanceId +
+        return " ---- Id-service : " +
+                idService +
                 " ---- Port the application : " +
                 environment.getProperty("local.server.port");
     }
@@ -41,6 +39,8 @@ public class ApiRestController {
 
         return "Hello. It's a microservice (name): " +
                 nameService +
+                " ---- Id-service : " +
+                idService +
                 " --- Uri a Discovery Service : " +
                 uriServiceDiscovery +
                 " --- PID the application : " +
