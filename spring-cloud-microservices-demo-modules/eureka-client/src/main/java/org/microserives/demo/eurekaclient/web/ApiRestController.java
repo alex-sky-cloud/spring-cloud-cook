@@ -17,9 +17,6 @@ public class ApiRestController {
     @Value("${spring.application.name}")
     private String nameService;
 
-    @Value("${eureka.client.service-url.defaultZone}")
-    private String uriServiceDiscovery;
-
    // @Value("${eureka.instance.instanceId}")
     private String idService;
 
@@ -41,8 +38,6 @@ public class ApiRestController {
 
         return "Hello. It's a microservice (name): " +
                 nameService +
-                " --- Uri a Discovery Service : " +
-                uriServiceDiscovery +
                 " --- PID the application : " +
                 System.getProperty("PID") +
                 " --- Port the application : " +
