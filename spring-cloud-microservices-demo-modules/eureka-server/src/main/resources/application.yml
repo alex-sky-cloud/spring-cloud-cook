@@ -1,29 +1,5 @@
-SERVER_PORT: 8761
-IP_ADDRESS: http://localhost
-
-eureka:
-  client:
-    # Т.к. это не клиент, а здесь настраивается Eureka-server
-    # то убираем лишние настройки (регистрация веб-сервисов и пр.)
-    # Сервер Eureka также может выступать в качестве клиента. Поэтому установка
-    # registerWith Eureka и fetchRegistry в false является обязательной
-    fetch-registry: false
-    register-with-eureka: false
-    service-url:
-      defaultZone: ${IP_ADDRESS}:${SERVER_PORT}/eureka #Адрес сервера регистрации(eureka-server)
-logging:
-  level:
-    com:
-      netflix:
-        # Отключение лишних логов у настраиваемого сервиса,
-        # т.к. не тут не будем создавать и вызывать микросервисы
-        discovery: 'OFF'
-        eureka: 'OFF'
-  pattern:
-    # определяем формат более короткого отображение логов
-    console: '%C{1.} [%-5level] %d{HH:mm:ss} - %msg%n'
-server:
-  port: ${SERVER_PORT}
 spring:
   application:
-    name: eureka-server # Id-приложения. Его желательно указывать всегда в микро-сервисных приложениях
+    name: eureka-server
+  config:
+    import: optional:configserver:http://localhost:8888
