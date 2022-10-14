@@ -17,8 +17,6 @@ public class ApiRestController {
     @Value("${spring.application.name}")
     private String nameService;
 
-   // @Value("${eureka.instance.instanceId}")
-    private String idService;
 
     @Value("${eureka.instance.instance-id}")
     private String instanceId;
