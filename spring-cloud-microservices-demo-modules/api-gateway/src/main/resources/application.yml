@@ -1,5 +1,8 @@
 spring:
   application:
     name: api-gateway # имя текущего сервиса
+  cloud:
+    config:
+      uri: http://localhost:8888
   config:
     import: configserver:http://localhost:8888
