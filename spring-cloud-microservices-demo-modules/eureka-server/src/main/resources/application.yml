@@ -6,3 +6,6 @@ spring:
       uri: http://localhost:8888
   config:
     import: configserver:http://localhost:8888
+
+  profiles:
+    active: microservice

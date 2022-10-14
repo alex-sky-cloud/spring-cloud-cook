@@ -7,3 +7,6 @@ spring:
   config:
     # этот uri имеет приоритет над значением в spring.cloud.config.uri
     import: configserver:http://localhost:8888
+
+  profiles:
+    active: microservice

@@ -1,8 +1,13 @@
 spring:
   application:
-    name: api-gateway # имя текущего сервиса
+    # имя текущего сервиса, это очень нужно для правильного взаимодействия с Spring config server
+    #  по этому же имени ищется файл с конфигурацией, для текущего сервиса
+    name: api-gateway
   cloud:
     config:
       uri: http://localhost:8888
   config:
     import: configserver:http://localhost:8888
+
+  profiles:
+    active: microservice
