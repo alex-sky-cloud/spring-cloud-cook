@@ -11,5 +11,4 @@ public class SpringConfigServerGithubApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringConfigServerGithubApplication.class, args);
 	}
-
 }
