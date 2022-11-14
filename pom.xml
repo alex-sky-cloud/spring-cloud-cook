@@ -17,6 +17,7 @@
 
     <modules>
         <module>circuit-breaker-resilience4j-simple</module>
+        <module>circuit-breaker-resilience4j-to-mock-service</module>
     </modules>
 
 </project>
