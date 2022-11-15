@@ -13,7 +13,6 @@ import java.time.Duration;
 @Configuration
 public class CircuitBreakerConfiguration {
 
-
     @Bean
     public Customizer<Resilience4JCircuitBreakerFactory> globalCustomConfiguration() {
 
@@ -55,7 +54,7 @@ public class CircuitBreakerConfiguration {
 
         return factory -> factory
                 .configure(builder -> builder.circuitBreakerConfig(circuitBreakerConfig)
-                .timeLimiterConfig(timeLimiterConfig).build(), "circuitBreaker");
+                .timeLimiterConfig(timeLimiterConfig).build(), "circuitBreakerFirst");
     }
 
 
@@ -73,7 +72,7 @@ public class CircuitBreakerConfiguration {
 
         return factory -> factory.configure(builder -> builder.circuitBreakerConfig(circuitBreakerConfig)
                         .timeLimiterConfig(timeLimiterConfig).build(),
-                "circuitBreaker1", "circuitBreaker2", "circuitBreaker3");
+                "circuitBreakerFirstV2", "circuitBreakerSecond", "circuitBreakerThird");
     }
 
 }

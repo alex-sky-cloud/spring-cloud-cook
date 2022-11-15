@@ -30,13 +30,15 @@ public class AlbumService {
     public String getAlbumList() {
 
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitbreaker");
-
         String url = "https://jsonplaceholder.typicode.com/albums";
 
         /*Метод run() принимает 2 аргумента:
-         * restTemplate.getForObject(url, String.class) - этот аргумент, это запрос к удаленному сервису
-         * throwable -> getDefaultAlbumList() - это 2-й аргумент, если произойдет ошибка, то есть удаленный сервис
-         * не отвечает, в этом случае, circuit breaker разомкнет цепь и выдаст в качестве результата,
+         * restTemplate.getForObject(url, String.class) - этот аргумент,
+         * это запрос к удаленному сервису
+         * throwable -> getDefaultAlbumList() - это 2-й аргумент,
+         * если произойдет ошибка, то есть удаленный сервис
+         * не отвечает, в этом случае, circuit breaker разомкнет цепь
+         * и выдаст в качестве результата,
          * данные представленные методом getDefaultAlbumList()
          * */
         return circuitBreaker
