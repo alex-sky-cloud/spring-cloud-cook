@@ -1,0 +1,37 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5673
+    username: guest
+    password: guest
+  cloud:
+    stream:
+      bindings:
+        # output - <functionName> + -out- + <index>
+        # output - Выходной канал, то есть канал, откуда публикуются
+        # сообщения
+        # <functionName> - имя binding , указывается в качестве
+        # первого аргумента в StreamBridge#send(<functionName>, ...)
+        # для отправки сообщения
+        # out - указывает, что это выходной канал
+        # 0 - Это индекс привязки ввода или вывода
+        send-out-0:
+          # Topic, куда будет отправлено сообщение
+          destination: inputSubscriber
+          # тип обрабатываемого сообщения, которое приходит извне
+          # которое будет десериализовано, обработанов endpoint
+          # текущего сервиса, затем создается объект, который будет
+          # отправлен в брокер(разумеется также будет сериализован в формат,
+          # который мы указали здесь)
+          # для передачи в брокер)
+          # Subscriber при получении десериализует Json-формат сообщения, в объект
+          # c такой же структурой, какой мы его определили в данном сервисе
+          content-type: application/json
+      # это может служить заменой свойству выше
+      # output-bindings: send-out-0
+
+  application:
+    name: publisher-service
+
+server:
+  port: 8020
