@@ -1,0 +1,26 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5673
+    username: guest
+    password: guest
+  application:
+    name: producer-service
+
+  cloud:
+    stream:
+      function:
+        # здесь указываются функции, для которых нужно сделать привязку
+        # send - эта функция будет генерировать целые числа и публиковать в Rabbit
+        definition: send
+      bindings:
+        # send - название функции, которую нужно "привязать" к выходноу каналу
+        # out - выходной канал
+        # 0 - индекс канала, который принимает данные. Этот индекс всегда равен 0
+        # для типичной одиночной функции ввода/вывода,
+        send-out-0:
+          # Название очереди, куда будут публиковаться сообщения
+          destination: integersChannel
+          group: integersChannelGroup
+server:
+  port: 8025

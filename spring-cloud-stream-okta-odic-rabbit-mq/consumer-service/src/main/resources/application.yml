@@ -1,0 +1,35 @@
+#okta:
+#  oauth2:
+#    client-secret: kvjIqFhFGAwGVbwDYJbo12Hv57OkQHM9ea4pAFV2
+#    client-id: 0oa7cfvaxg3Z5D0rc5d7
+#    issuer: https://dev-05974330.okta.com/oauth2/default
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5673
+    username: guest
+    password: guest
+  application:
+    name: consumer-service
+
+
+  cloud:
+    stream:
+      function:
+        # здесь указываются функции, для которых нужно сделать привязку
+        # receive - эта функция будет получать целые числа из Rabbit,
+        # обрабатывать,
+        definition: receive
+      bindings:
+        # receive - название функции, которую нужно "привязать" к входному каналу
+        # in - входной канал фукнции (данные сюда поставляются из брокера)
+        # 0 - индекс входного канала, который принимает данные. Этот индекс всегда равен 0
+        # для типичной одиночной функции ввода/вывода. В данном случае он получает
+        # данные в виде accumulatorMessageChannel
+        receive-in-0:
+          destination: accumulatorMessageChannel
+          group: accumulatorMessageChannelGroup
+
+server:
+  port: 8030

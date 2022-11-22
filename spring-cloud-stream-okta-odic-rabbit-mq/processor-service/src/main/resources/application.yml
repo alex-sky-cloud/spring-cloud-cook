@@ -1,0 +1,37 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5673
+    username: guest
+    password: guest
+  application:
+    name: processor-service
+
+
+  cloud:
+    stream:
+      function:
+        # здесь указываются функции, для которых нужно сделать привязку
+        # accumulate - эта функция будет получать целые числа из Rabbit,
+        # обрабатывать,
+        definition: accumulate
+      bindings:
+        # accumulate - название функции, которую нужно "привязать" к выходному каналу
+        # и входному каналу
+        # out - выходной канал фукнции (данные оттуда публикуются в брокер)
+        # in - входной канал фукнции (данные сюда поставляются из брокера)
+        # 0 - индекс входного канала, который принимает данные. Этот индекс всегда равен 0
+        # для типичной одиночной функции ввода/вывода. В данном случае он получает
+        # данные в виде целых чисел - Integer
+        # 0 - индекс выходного канала, который принимает данные. Этот индекс всегда равен 0
+        # для типичной одиночной функции ввода/вывода. В данном случае, после
+        # обработки, данные упаковываются в AccumulatorMessage и публикуются
+        # в очередь accumulatorMessageChannel
+        accumulate-in-0:
+          destination: integersChannel # из этой очереди данные потребляются
+          group: integersChannelGroup
+        accumulate-out-0:
+          destination: accumulatorMessageChannel
+          group: accumulatorMessageChannelGroup
+server:
+  port: 8020
