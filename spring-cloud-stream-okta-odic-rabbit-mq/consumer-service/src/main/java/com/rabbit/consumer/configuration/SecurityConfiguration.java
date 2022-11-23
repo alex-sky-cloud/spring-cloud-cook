@@ -8,7 +8,9 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 
-/** Чтобы получить поддержку Spring Security WebFlux */
+/**
+ * Чтобы получить поддержку Spring Security WebFlux
+ */
 @EnableWebFluxSecurity
 /*включает защиту безопасности для методов, которые используются
 реактивном стеке*/
@@ -17,17 +19,19 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfiguration {
 
     /***
-     * Настраиваем web-security, чтобы разрешить публичные
-     * вызовы для всех транзакций. То есть любой запрос в данный сервис, не будет
-     * проходить проверку авторизации и аутентификации.
-     * permitAll() - позволяет доступ всем клиентам.
-      */
+     * Настраиваем web-security, чтобы
+     * вызовы для всех транзакций будут проходить проверку авторизации и аутентификации.
+     */
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 
-        http.authorizeExchange()
-                .anyExchange()
-                .permitAll();
+        http
+                .csrf()
+                .disable()
+                .authorizeExchange(authorizeExchange ->
+                        authorizeExchange.anyExchange().authenticated())
+                .oauth2ResourceServer().jwt();
+
         return http.build();
     }
 }
