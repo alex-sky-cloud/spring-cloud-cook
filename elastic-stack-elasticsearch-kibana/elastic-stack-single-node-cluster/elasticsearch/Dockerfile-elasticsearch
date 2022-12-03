@@ -1,0 +1,7 @@
+ARG ELK_VERSION
+
+# путь к исходному docker-image elasticsearch, который на docker-hub
+FROM elasticsearch:${ELK_VERSION}
+# добавить пользовательскую конфигурацию
+# elasticsearch-single-node.yml - данный файл будет скопирован в создаваемый docker-image
+ADD --chown=elasticsearch:root elasticsearch-single-node.yml /usr/share/elasticsearch/config/elasticsearch.yml

@@ -5,22 +5,17 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>3.0.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>spring-cloud-cook</artifactId>
+    <artifactId>project-elk-free</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-cloud-cook</name>
-    <description>spring-cloud-cook</description>
+    <name>project-elk-free</name>
+    <description>project-elk-free</description>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
     <packaging>pom</packaging>
-
-    <modules>
-        <module>circuit-breaker-resilience4j-simple</module>
-        <module>circuit-breaker-resilience4j-to-mock-service</module>
-        <module>elastik-logstash-kibana-docker</module>
-        <module>filebeat-elastic-kibana-logstash-docker</module>
-        <module>spring-cloud-stream-okta-odic-rabbit-mq</module>
-    </modules>
 
 </project>

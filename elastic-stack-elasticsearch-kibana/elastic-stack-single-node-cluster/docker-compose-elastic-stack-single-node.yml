@@ -1,0 +1,55 @@
+version: '3.9'
+services:
+  # Здесь нужно добавить конфигурацию сервиса elasticsearch's
+  elasticsearch:
+    hostname: elasticsearch
+    container_name: elasticsearch
+    build:
+      context: ./elasticsearch
+      # Dockerfile будет определен в корне каталога elasticsearch
+      dockerfile: Dockerfile-elasticsearch
+      # данные аргументы в виде переменных были определены в файле .env
+      args:
+        - ELK_VERSION=${ELK_VERSION}
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+    volumes:
+      # имя данного volume определено ниже; rw указывает, что под данному пути
+      # доступен указанный каталог (/usr/share/elasticsearch/data), внутри контейнера
+      # на чтение\запись
+      - ./data_elastic_stack:/usr/share/elasticsearch/data:rw
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    # В системах Linux, свойство ulimit можно использовать для изменения
+    # лимитов ресурсов на временной основе.
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks: # Имя сети определили ниже
+      - elastic-stack-service-network
+
+  kibana:
+    hostname: kibana
+    container_name: kibana
+    build:
+      context: ./kibana
+      dockerfile: Dockerfile-kibana
+      args:
+        - ELK_VERSION=${ELK_VERSION}
+    ports:
+      - "5601:5601"
+    networks:
+      - elastic-stack-service-network
+
+# Здесь также добавьте конфигурацию сервиса kibana's
+# Создание сетей (Networks), чтобы облегчить взаимодействие
+# между контейнерами
+networks:
+  elastic-stack-service-network:
+    name: elastic-stack-service-network
+# Volumes
+volumes:
+  data_elastic_stack:
+    driver: local
