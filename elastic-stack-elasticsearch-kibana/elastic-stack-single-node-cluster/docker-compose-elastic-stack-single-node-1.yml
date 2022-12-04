@@ -11,6 +11,8 @@ services:
       # данные аргументы в виде переменных были определены в файле .env
       args:
         - ELK_VERSION=${ELK_VERSION}
+      labels:
+        co.elastic.logs/module: "elasticsearch"
     ports:
       - "9300:9300"
       - "9200:9200"
@@ -18,7 +20,7 @@ services:
       # имя данного volume определено ниже; rw указывает, что под данному пути
       # доступен указанный каталог (/usr/share/elasticsearch/data), внутри контейнера
       # на чтение\запись
-      - ./data_elastic_stack:/usr/share/elasticsearch/data:rw
+      - ./volumes/data_elastic_stack:/usr/share/elasticsearch/data:rw
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     # В системах Linux, свойство ulimit можно использовать для изменения
@@ -38,6 +40,8 @@ services:
       dockerfile: Dockerfile-kibana
       args:
         - ELK_VERSION=${ELK_VERSION}
+      labels:
+        co.elastic.logs/module: "kibana"
     ports:
       - "5601:5601"
     networks:

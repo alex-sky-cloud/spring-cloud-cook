@@ -1,0 +1,136 @@
+######################## Filebeat Configuration ############################
+# Вы можете найти полный справочник по конфигурации здесь:
+# https://www.elastic.co/guide/en/beats/filebeat/index.html
+
+# ========================== Filebeat global options ===========================
+# Включить/отключить перезагрузку конфигурации filebeat
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+# =========================== Filebeat autodiscover ============================
+# Autodiscover (автообнаружение) позволяет обнаруживать изменения в системе и порождать новые модули
+# или входные данные (inputs), когда они производятся.
+filebeat.autodiscover:
+  # Список включенных провайдеров автообнаружения (autodiscover)
+  providers:
+    - type: docker
+      hints.enabled: true
+
+# ================================= Processors =================================
+# Processors используются для уменьшения количества полей в экспортируемом событии (Event)
+# или чтобы расширить событие (the event), внешними данными. Эта секция определяет список
+# processors, которые применяются один за другим
+# и сначала первый процессор получает начальное событие (initial event):
+#
+#   event -> filter1 -> event1 -> filter2 ->event2 ...
+#
+# Поддерживаемыми processors являются : drop_fields, drop_event, include_fields,
+# decode_json_fields, и add_cloud_metadata.
+processors:
+  # В следующем примере, каждое событие (event) обогащается метаданными докера (docker metadata),
+  # оно соответствует container-id (идентификатору контейнера) из пути к журналу (log path)
+  # доступному в поле `source` (по умолчанию, он ожидает, что это должен быть путь
+  # /var/lib/docker/containers/*/*.log)
+  - add_docker_metadata: ~
+  # Следующий пример, обогащает каждый event метаданными хоста (host metadata).
+  - add_host_metadata: ~
+
+# ================================== Outputs ===================================
+# Настройте, какой `output` использовать для отправки данных, собранных при помощи beat.
+# ---------------------------- Elasticsearch Output ----------------------------
+output.elasticsearch:
+  # Boolean flag to enable or disable the output module
+  # (Логический флаг для включения или отключения модуля вывода.).
+  enabled: true
+  # Array of hosts to connect to (массив хостов, для подключения к ним).
+  # Scheme and port (схема и порт) могут быть опущены , тогда будут установлены
+  # значения по умолчанию (http и 9200)
+  # В случае, когда вы определите дополнительный путь (additional path),
+  # тогда схема будет выглядеть так : http://localhost:9200/path
+  # IPv6 адреса, должны всегда определяться как: https://[2001:db8::1]:9200
+  hosts: ['elasticsearch:9200']
+
+# ================================= Dashboards =================================
+# Эти настройки управляют загрузкой примеров панелей мониторинга (dashboards) в индекс Kibana
+# Загрузка dashboards(информационных панелей), по умолчанию - отключена. Ее можно включить
+# в данном свойстве, либо используя из командной строки флаг `-setup` или команду `setup`.
+setup.dashboards.enabled: true
+
+# =================================== Kibana ===================================
+# Начиная с версии Beats 6.0.0, the dashboards загружаются через Kibana API.
+# Это требует конфигурации endpoint для Kibana.
+setup.kibana:
+  # Kibana Host
+  # Scheme and port (схема и порт) могут быть опущены , тогда будут установлены
+  # значения по умолчанию (http и 5601)
+  # В случае, когда вы определите дополнительный путь (additional path),
+  # тогда схема будет выглядеть так: http://localhost:5601/path
+  # IPv6 адреса, должны всегда определяться как: https://[2001:db8::1]:5601
+  # Здесь укажите тот адрес, по которому доступна Kibana на вашем хосте
+  host: "localhost:5601"
+
+# ================================== Logging ===================================
+# Существует 4 варианта для log output: file, stderr, syslog, eventlog
+# The file output является значением по умолчанию.
+# Данное свойство устанавливает log level. По умолчанию log level является info.
+# Доступными log levels являются: error, warning, info, debug
+logging.level: info
+
+# Записывайте собственные Filebeat logs только в file,
+# чтобы избежать захвата этих лог файлов с собой в docker log files
+# Когда данное свойство установлено в true,
+# происходит запись всех logging output (журналов) to files. 
+# log files автоматически будут ротироваться (то есть будет создан новый файл)
+# когда размер log file достигнет предела
+logging.to_files: false
+
+# Когда значение установлено в true, записывает все logging output в syslog.
+# Это опция не поддерживается в Windows.
+logging.to_syslog: false
+
+# ============================= X-Pack Monitoring ==============================
+# Filebeat может экспортировать внутренние показатели (metrics) в центральный кластер
+# мониторинга Elasticsearch. Для этого необходимо включить мониторинг xpack в Elasticsearch.
+# This requires xpack monitoring to be enabled in Elasticsearch.
+# Генерирование отчетов (reporting) по умолчанию - отключена.
+
+# Установите значение true, чтобы включить отчет о мониторинге (monitoring reporter).
+monitoring.enabled: true
+
+# Раскомментируйте, чтобы отправить метрики в Elasticsearch.
+# Здесь также принимается большинство настроек из выходных данных
+# Elasticsearch(Elasticsearch output) также.
+# Обратите внимание, что настройки должны указывать на ваш кластер
+# мониторинга (*monitoring*) Elasticsearch
+# Любой параметр, который не задан, автоматически наследуется
+# от конфигурации output Elasticsearch, поэтому, если у вас
+# сконфигурирован output Elasticsearch так, что он указывает на ваш
+# кластер мониторинга Elasticsearch, тогда вы можете расскоментировать
+# следующую строку.
+monitoring.elasticsearch:
+# Массив hosts для подключения к ним.
+# Scheme and port (схема и порт) могут быть опущены , тогда будут установлены
+# значения по умолчанию (http и 9200)
+# В случае, когда вы определите дополнительный путь (additional path):  http://localhost:9200/path
+# IPv6 адреса, должны всегда определяться как:  https://[2001:db8::1]:9200
+hosts: ["elasticsearch:9200"]
+
+# =============================== HTTP Endpoint ================================
+# Каждый beat может предоставлять internal metrics через a HTTP endpoint. For security
+# По соображениям безопасности endpoint по умолчанию - отключен. Эта функция на текущий момент
+# эксперементальна.
+# Статистика может быть доступна по адресу http://localhost:5066/stats .
+# Чтобы отобразить вывод (output) в JSON, присоедините параметр  ?pretty в URL.
+# Определяет, включена ли HTTP endpoint.
+http.enabled: true
+
+# HTTP endpoint будет связан к указанному hostname, IP address, unix socket или именнованному каналу
+# (named pipe).
+# При использовании IP-адресов рекомендуется использовать только localhost.
+http.host: filebeat-to-elasticsearch
+
+# Порт, к которому будет привязан HTTP endpoint
+# Default is 5066.
+http.port: 5066

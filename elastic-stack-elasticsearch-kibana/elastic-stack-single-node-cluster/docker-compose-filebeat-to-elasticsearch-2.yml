@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+  filebeat-to-elasticsearch:
+    hostname: filebeat-to-elasticsearch
+    container_name: filebeat-to-elasticsearch
+    build:
+      context: ./filebeat
+      dockerfile: Dockerfile
+      args:
+        - ELK_VERSION=${ELK_VERSION}
+        - FILEBEAT_CONFIG=filebeat-to-elasticsearch
+    ports:
+      - "5166:5066"
+    # Необходимо переопределить пользователя (user so),
+    # чтобы мы могли получить доступ к файлам журнала и docker.sock
+    user: root
+    # ro - данные только для чтения
+    # rw - данные для чтения и записи
+    # :z или :Z - Эти суффиксы позволяют Docker переименовывать файловые объекты
+    # на общих томах. z-Опция сообщает Docker, что два контейнера совместно используют содержимое тома.
+    # :so
+    # (для Linux- /var/run/docker.sock )
+    volumes:
+      - /c/Users/it/AppData/Local/Docker/log/:/var/log/:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Это необходимо для filebeat, чтобы загрузить путь к log, docker-контейнера,
+      #  определенного в конфигурации filebeat.yml (для Linux - /var/lib/docker/containers/ )
+      - /var/lib/docker/containers/:/var/lib/docker/containers/:ro
+      # Это необходимо для того, чтобы filebeat загружал логи системных и авторизационных модулей.
+      # logs for system and auth modules (для Linux - var/log/ )
+      - /var/log/:/var/log/:ro
+    # отключить в разворачиваемом контейнере, строгие проверки разрешений
+    command: [ '-e', '-v', '--strict.perms=false' ]
+    networks:
+      - elastic-stack-service-network
+
+# Networks создается для облегчения взаимодействия между контейнерами
+networks:
+  elastic-stack-service-network:
+    name: elastic-stack-service-network

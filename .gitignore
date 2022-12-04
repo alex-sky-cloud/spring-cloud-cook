@@ -33,3 +33,4 @@ build/
 .vscode/
 /spring-cloud-microservices-demo-modules/gradlew
 /spring-cloud-microservices-demo-modules/gradlew.bat
+/elastic-stack-elasticsearch-kibana/elastic-stack-single-node-cluster/volumes/
