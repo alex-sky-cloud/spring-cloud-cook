@@ -20,8 +20,10 @@ services:
     # на общих томах. z-Опция сообщает Docker, что два контейнера совместно используют содержимое тома.
     # :so
     # (для Linux- /var/run/docker.sock )
+    # здесь указываете путь до логов, которые вы хотите собирать
     volumes:
-      - /c/Users/it/AppData/Local/Docker/log/:/var/log/:ro
+      # Это путь к логам Docker в ОС Windows
+      - /c/Users/it/AppData/Local/Docker/log/vm/:/var/log/:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Это необходимо для filebeat, чтобы загрузить путь к log, docker-контейнера,
       #  определенного в конфигурации filebeat.yml (для Linux - /var/lib/docker/containers/ )

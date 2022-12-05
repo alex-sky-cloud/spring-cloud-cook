@@ -1,0 +1,12 @@
+server:
+  port: 8082
+
+udp:
+  server:
+    port: 4445
+
+app:
+  signal:
+    server: end
+  size:
+    message: 20

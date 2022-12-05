@@ -1,0 +1,13 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: udp-server
+
+app:
+  port: 4445
+  size:
+    buffer: 256
+  signal:
+    server: end
