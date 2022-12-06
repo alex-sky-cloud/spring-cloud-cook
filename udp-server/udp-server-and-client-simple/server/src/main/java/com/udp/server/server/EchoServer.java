@@ -62,7 +62,7 @@ public class EchoServer {
             byte[] response = new byte[this.buffer.length];
 
             if(!isOffServer){
-                String responseToClient = "Hello " + received;
+                String responseToClient = "Hello " + received + ".";
 
                 response = convertStringToByteArr(responseToClient);
 

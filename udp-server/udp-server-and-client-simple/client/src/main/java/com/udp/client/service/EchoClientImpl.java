@@ -48,28 +48,33 @@ public class EchoClientImpl implements EchoClient{
                 address,
                 this.portUdpSever);
 
+        /*На методе send() поток блокируется, пока не будет получен ответ от UDP-server*/
         try {
-            socket.send(packet);
             log.info("Клиент UDP посылает сообщение к UDP-server.");
+            socket.send(packet);
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }
 
+        /*Формируем контейнер, в который будет сохранен ответ, полученный от сервера UDP*/
         packet = new DatagramPacket(buffer, lengthMessage);
 
 
+        /*пробуем получить ответ от UDP-server.
+        * Если заданное выше, значение таймаута от сервера будет превышено,
+        * тогда обработаем IOException*/
         try {
             socket.receive(packet);
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }
 
+        /*один вариант преобразования полученного ответа*/
         byte[] dataFromUdpServer = packet.getData();
-
         String response = convertByteArrToString(dataFromUdpServer);
-
         log.info("Клиент UDP получил ответ от сервера:. " + response);
 
+        /*2-й вариант преобразования полученного ответа*/
         return new String(dataFromUdpServer, 0, packet.getLength());
     }
 
